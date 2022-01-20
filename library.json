@@ -1,0 +1,24 @@
+{
+  "name": "TaixArduDiscoveryMQTTDevice",
+  "version": "0.0.0",
+  "description": "Una librería para crear dispositivos por el descubrimiento MQTT",
+  "keywords": "TaixMiguel, MQTT Discovery",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/TaixMiguel/TaixArduDiscoveryMQTTDevice.git"
+  },
+  "authors": [
+    {
+      "name": "TaixMiguel",
+      "url": "https://github.com/TaixMiguel",
+      "maintainer": true
+    }
+  ],
+  "license": "GNU General Public License v3.0",
+  "frameworks": "arduino",
+  "platforms": [
+    "esp32",
+    "espressif32"
+  ]
+}
