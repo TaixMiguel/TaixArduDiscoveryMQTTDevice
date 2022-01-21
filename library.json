@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "description": "Una librería para crear dispositivos por el descubrimiento MQTT",
   "keywords": "TaixMiguel, MQTT Discovery",
-  "repository":
-  {
+  "repository": {
     "type": "git",
     "url": "https://github.com/TaixMiguel/TaixArduDiscoveryMQTTDevice.git"
   },
@@ -20,5 +19,8 @@
   "platforms": [
     "esp32",
     "espressif32"
-  ]
+  ],
+  "dependencies": {
+    "bblanchon/ArduinoJson": "^6.19.1"
+  }
 }
