@@ -39,10 +39,12 @@ void MQTTDevice::addConfigDevice(DynamicJsonDocument& json) {
 }
 
 
-MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic) {
+MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId = "") {
   MQTTEntity mqttEntity;
   mqttEntity.mqttDevice = mqttDevice;
   mqttEntity.stateTopic = stateTopic;
+  mqttEntity.objectId = objectId;
+  mqttEntity.uniqueId = objectId;
   return mqttEntity;
 }
 

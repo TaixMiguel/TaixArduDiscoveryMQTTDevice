@@ -39,7 +39,7 @@ class MQTTEntity {
     String unitOfMeasurement;
     String valueTemplate;
 
-    static MQTTEntity createSensor(MQTTDevice mqttDevice, String name, String stateTopic);
+    static MQTTEntity createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId = "");
     String getJsonSensor();
 
   private:
