@@ -39,12 +39,26 @@ void MQTTDevice::addConfigDevice(DynamicJsonDocument& json) {
 }
 
 
-MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId = "") {
+MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId) {
   MQTTEntity mqttEntity;
   mqttEntity.mqttDevice = mqttDevice;
   mqttEntity.stateTopic = stateTopic;
   mqttEntity.objectId = objectId;
   mqttEntity.uniqueId = objectId;
+  mqttEntity.name = name;
+  return mqttEntity;
+}
+
+MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float min, float max, String stateTopic) {
+  MQTTEntity mqttEntity;
+  mqttEntity.mqttDevice = mqttDevice;
+  mqttEntity.commandTopic = commandTopic;
+  mqttEntity.stateTopic = stateTopic;
+  mqttEntity.objectId = objectId;
+  mqttEntity.uniqueId = objectId;
+  mqttEntity.min = min;
+  mqttEntity.max = max;
+  mqttEntity.name = name;
   return mqttEntity;
 }
 
@@ -58,9 +72,11 @@ String MQTTEntity::getJsonSensor() {
   addParamIfNotEmpty(json, "name", name);
   addParamIfNotEmpty(json, "obj_id", objectId);
   addParamIfNotEmpty(json, "stat_t", stateTopic);
+  addParamIfNotEmpty(json, "cmd_t", commandTopic);
   addParamIfNotEmpty(json, "uniq_id", uniqueId);
   addParamIfNotEmpty(json, "unit_of_meas", unitOfMeasurement);
   addParamIfNotEmpty(json, "val_tpl", valueTemplate);
+  addParamIfNotEmpty(json, "cmd_tpl", commandTemplate);
   mqttDevice.addConfigDevice(json);
 
   // TODO: eliminar en futuras versiones

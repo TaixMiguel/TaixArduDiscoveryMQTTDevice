@@ -33,13 +33,14 @@ class MQTTEntity {
     bool enabledByDefault = true;
     String icon;
     String name;
-    String objectId;
-    String stateTopic;
-    String uniqueId;
+    String objectId, uniqueId;
+    String stateTopic, valueTemplate;
+    String commandTopic, commandTemplate;
     String unitOfMeasurement;
-    String valueTemplate;
+    float min, max;
 
-    static MQTTEntity createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId = "");
+    static MQTTEntity createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId="");
+    static MQTTEntity createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId="", float min=1, float max=100, String stateTopic="");
     String getJsonSensor();
 
   private:
