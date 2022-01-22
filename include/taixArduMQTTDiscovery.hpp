@@ -45,6 +45,8 @@ class MQTTEntity {
 
   private:
     MQTTDevice mqttDevice;
+
+    static MQTTEntity createGeneric(MQTTDevice mqttDevice, String name, String objectId="", String stateTopic="", String commandTopic="");
 };
 
 #endif

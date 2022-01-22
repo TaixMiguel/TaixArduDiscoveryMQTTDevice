@@ -35,27 +35,25 @@ void MQTTDevice::addConfigDevice(DynamicJsonDocument& json) {
   addParamIfNotEmpty(device, "via_device", viaDevice);
 }
 
-
-MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId) {
+MQTTEntity MQTTEntity::createGeneric(MQTTDevice mqttDevice, String name, String objectId, String stateTopic, String commandTopic) {
   MQTTEntity mqttEntity;
   mqttEntity.mqttDevice = mqttDevice;
   mqttEntity.stateTopic = stateTopic;
+  mqttEntity.commandTopic = commandTopic;
   mqttEntity.objectId = objectId;
   mqttEntity.uniqueId = objectId;
   mqttEntity.name = name;
   return mqttEntity;
 }
 
+MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId) {
+  return MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic);
+}
+
 MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float min, float max, String stateTopic) {
-  MQTTEntity mqttEntity;
-  mqttEntity.mqttDevice = mqttDevice;
-  mqttEntity.commandTopic = commandTopic;
-  mqttEntity.stateTopic = stateTopic;
-  mqttEntity.objectId = objectId;
-  mqttEntity.uniqueId = objectId;
+  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
   mqttEntity.min = min;
   mqttEntity.max = max;
-  mqttEntity.name = name;
   return mqttEntity;
 }
 
