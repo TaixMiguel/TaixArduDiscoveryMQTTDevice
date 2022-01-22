@@ -8,16 +8,22 @@ void MQTTDevice::addIdentifier(String identifier) {
   identifiers.push_back(identifier);
 }
 
-void addParamIfNotEmpty(DynamicJsonDocument& json, String abbreviation, String data) {
-  if (!data.isEmpty()) json[abbreviation] = data;
+void addParamIfNotEmpty(DynamicJsonDocument& json, String key, String data) {
+  if (!data.isEmpty()) json[key] = data;
 }
-void addParamIfNotEmpty(JsonObject& json, String abbreviation, String data) {
-  if (!data.isEmpty()) json[abbreviation] = data;
+void addParamIfNotEmpty(JsonObject& json, String key, String data) {
+  if (!data.isEmpty()) json[key] = data;
 }
 
-void addArrayIfNotEmpty(JsonObject& json, String abbreviation, std::vector<String> vData) {
+void addArrayIfNotEmpty(DynamicJsonDocument& json, String key, std::vector<String> vData) {
   if (!vData.empty()) {
-    JsonArray array = json.createNestedArray(abbreviation);
+    JsonArray array = json.createNestedArray(key);
+    for (auto iData : vData) array.add(iData);
+  }
+}
+void addArrayIfNotEmpty(JsonObject& json, String key, std::vector<String> vData) {
+  if (!vData.empty()) {
+    JsonArray array = json.createNestedArray(key);
     for (auto iData : vData) array.add(iData);
   }
 }
@@ -50,8 +56,9 @@ MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String s
   return MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic);
 }
 
-MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float min, float max, String stateTopic) {
+MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float step, float min, float max, String stateTopic) {
   MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+  mqttEntity.step = step;
   mqttEntity.min = min;
   mqttEntity.max = max;
   return mqttEntity;
@@ -61,6 +68,12 @@ MQTTEntity MQTTEntity::createSwitch(MQTTDevice mqttDevice, String name, String c
   MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
   mqttEntity.payloadOff = payloadOff;
   mqttEntity.payloadOn = payloadOn;
+  return mqttEntity;
+}
+
+MQTTEntity MQTTEntity::createSelect(MQTTDevice mqttDevice, String name, String commandTopic, std::vector<String> options, String objectId, String stateTopic) {
+  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+  mqttEntity.options = options;
   return mqttEntity;
 }
 
@@ -84,6 +97,7 @@ String MQTTEntity::getJSON() {
   json["min"] = min;
   json["max"] = max;
   json["step"] = step;
+  addArrayIfNotEmpty(json, "options", options);
   mqttDevice.addConfigDevice(json);
 
   // TODO: eliminar en futuras versiones
