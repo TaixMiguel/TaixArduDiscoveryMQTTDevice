@@ -11,9 +11,6 @@ void MQTTDevice::addIdentifier(String identifier) {
 void addParamIfNotEmpty(DynamicJsonDocument& json, String abbreviation, String data) {
   if (!data.isEmpty()) json[abbreviation] = data;
 }
-void addParamIfNotEmpty(DynamicJsonDocument& json, String abbreviation, bool data) {
-  json[abbreviation] = data;
-}
 void addParamIfNotEmpty(JsonObject& json, String abbreviation, String data) {
   if (!data.isEmpty()) json[abbreviation] = data;
 }
@@ -62,12 +59,12 @@ MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String c
   return mqttEntity;
 }
 
-String MQTTEntity::getJsonSensor() {
+String MQTTEntity::getJSON() {
   DynamicJsonDocument json(1024);
 
   addParamIfNotEmpty(json, "avty_t", availabilityTopic);
   addParamIfNotEmpty(json, "dev_cla", deviceClass);
-  addParamIfNotEmpty(json, "enabled_by_default", enabledByDefault);
+  json["enabled_by_default"] = enabledByDefault;
   addParamIfNotEmpty(json, "ic", icon);
   addParamIfNotEmpty(json, "name", name);
   addParamIfNotEmpty(json, "obj_id", objectId);
@@ -77,6 +74,9 @@ String MQTTEntity::getJsonSensor() {
   addParamIfNotEmpty(json, "unit_of_meas", unitOfMeasurement);
   addParamIfNotEmpty(json, "val_tpl", valueTemplate);
   addParamIfNotEmpty(json, "cmd_tpl", commandTemplate);
+  json["min"] = min;
+  json["max"] = max;
+  json["step"] = step;
   mqttDevice.addConfigDevice(json);
 
   // TODO: eliminar en futuras versiones
