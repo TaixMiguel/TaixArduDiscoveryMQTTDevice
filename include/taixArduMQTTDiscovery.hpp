@@ -19,11 +19,31 @@ class MQTTDevice {
 
     void addConnection(String connection);
     void addIdentifier(String identifier);
-    void addConfigDevice(StaticJsonDocument<1000> json);
+    void addConfigDevice(DynamicJsonDocument& json);
 
   private:
     std::vector<String> connections;
     std::vector<String> identifiers;
+};
+
+class MQTTEntity {
+  public:
+    String availabilityTopic;
+    String deviceClass;
+    bool enabledByDefault = true;
+    String icon;
+    String name;
+    String objectId;
+    String stateTopic;
+    String uniqueId;
+    String unitOfMeasurement;
+    String valueTemplate;
+
+    static MQTTEntity createSensor(MQTTDevice mqttDevice, String name, String stateTopic);
+    String getJsonSensor();
+
+  private:
+    MQTTDevice mqttDevice;
 };
 
 #endif
