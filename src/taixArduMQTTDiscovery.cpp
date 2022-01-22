@@ -57,10 +57,19 @@ MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String c
   return mqttEntity;
 }
 
+MQTTEntity MQTTEntity::createSwitch(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, String payloadOn, String payloadOff, String stateTopic) {
+  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+  mqttEntity.payloadOff = payloadOff;
+  mqttEntity.payloadOn = payloadOn;
+  return mqttEntity;
+}
+
 String MQTTEntity::getJSON() {
   DynamicJsonDocument json(1024);
 
   addParamIfNotEmpty(json, "avty_t", availabilityTopic);
+  addParamIfNotEmpty(json, "pl_off", payloadOff);
+  addParamIfNotEmpty(json, "pl_on", payloadOn);
   addParamIfNotEmpty(json, "dev_cla", deviceClass);
   json["enabled_by_default"] = enabledByDefault;
   addParamIfNotEmpty(json, "ic", icon);

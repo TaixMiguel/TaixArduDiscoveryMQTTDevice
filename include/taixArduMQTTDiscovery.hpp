@@ -29,6 +29,7 @@ class MQTTDevice {
 class MQTTEntity {
   public:
     String availabilityTopic;
+    String payloadOn, payloadOff;
     String deviceClass;
     bool enabledByDefault = true;
     String icon;
@@ -41,6 +42,7 @@ class MQTTEntity {
 
     static MQTTEntity createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId="");
     static MQTTEntity createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId="", float min=1, float max=100, String stateTopic="");
+    static MQTTEntity createSwitch(MQTTDevice mqttDevice, String name, String commandTopic, String objectId="", String payloadOn="ON", String payloadOff="OFF", String stateTopic="");
     String getJSON();
 
   private:

@@ -1,6 +1,6 @@
 {
   "name": "TaixArduDiscoveryMQTTDevice",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Una librería para crear dispositivos por el descubrimiento MQTT",
   "keywords": "TaixMiguel, MQTT Discovery",
   "repository": {
