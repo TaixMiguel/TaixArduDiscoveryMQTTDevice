@@ -45,6 +45,8 @@ class MQTTEntity {
     String getJSON();
 
   private:
+    enum DeviceType { Default, Number, Switch };
+    DeviceType deviceType = Default;
     MQTTDevice mqttDevice;
     float step, min, max;
     std::vector<String> options;

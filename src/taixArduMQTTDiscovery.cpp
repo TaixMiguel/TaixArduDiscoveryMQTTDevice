@@ -58,6 +58,7 @@ MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String s
 
 MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float step, float min, float max, String stateTopic) {
   MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+  mqttEntity.deviceType = Number;
   mqttEntity.step = step;
   mqttEntity.min = min;
   mqttEntity.max = max;
@@ -66,6 +67,7 @@ MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String c
 
 MQTTEntity MQTTEntity::createSwitch(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, String payloadOn, String payloadOff, String stateTopic) {
   MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+  mqttEntity.deviceType = Switch;
   mqttEntity.payloadOff = payloadOff;
   mqttEntity.payloadOn = payloadOn;
   return mqttEntity;
@@ -84,7 +86,7 @@ String MQTTEntity::getJSON() {
   addParamIfNotEmpty(json, "pl_off", payloadOff);
   addParamIfNotEmpty(json, "pl_on", payloadOn);
   addParamIfNotEmpty(json, "dev_cla", deviceClass);
-  json["enabled_by_default"] = enabledByDefault;
+  if (deviceType == Switch) json["enabled_by_default"] = enabledByDefault;
   addParamIfNotEmpty(json, "ic", icon);
   addParamIfNotEmpty(json, "name", name);
   addParamIfNotEmpty(json, "obj_id", objectId);
@@ -94,9 +96,11 @@ String MQTTEntity::getJSON() {
   addParamIfNotEmpty(json, "unit_of_meas", unitOfMeasurement);
   addParamIfNotEmpty(json, "val_tpl", valueTemplate);
   addParamIfNotEmpty(json, "cmd_tpl", commandTemplate);
-  json["min"] = min;
-  json["max"] = max;
-  json["step"] = step;
+  if (deviceType == Number) {
+    json["min"] = min;
+    json["max"] = max;
+    json["step"] = step;
+  }
   addArrayIfNotEmpty(json, "options", options);
   mqttDevice.addConfigDevice(json);
 
