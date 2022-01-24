@@ -41,23 +41,24 @@ void MQTTDevice::addConfigDevice(DynamicJsonDocument& json) {
   addParamIfNotEmpty(device, "via_device", viaDevice);
 }
 
-MQTTEntity MQTTEntity::createGeneric(MQTTDevice mqttDevice, String name, String objectId, String stateTopic, String commandTopic) {
+MQTTEntity MQTTEntity::createGeneric(MQTTDevice mqttDevice, String name, String objectId, String stateTopic, String commandTopic, bool retain) {
   MQTTEntity mqttEntity;
   mqttEntity.mqttDevice = mqttDevice;
   mqttEntity.stateTopic = stateTopic;
   mqttEntity.commandTopic = commandTopic;
   mqttEntity.objectId = objectId;
   mqttEntity.uniqueId = objectId;
+  mqttEntity.retain = retain;
   mqttEntity.name = name;
   return mqttEntity;
 }
 
-MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId) {
-  return MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic);
+MQTTEntity MQTTEntity::createSensor(MQTTDevice mqttDevice, String name, String stateTopic, String objectId, bool retain) {
+  return MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, "", retain);
 }
 
-MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float step, float min, float max, String stateTopic) {
-  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, float step, float min, float max, String stateTopic, bool retain) {
+  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic, retain);
   mqttEntity.deviceType = Number;
   mqttEntity.step = step;
   mqttEntity.min = min;
@@ -65,16 +66,16 @@ MQTTEntity MQTTEntity::createNumber(MQTTDevice mqttDevice, String name, String c
   return mqttEntity;
 }
 
-MQTTEntity MQTTEntity::createSwitch(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, String payloadOn, String payloadOff, String stateTopic) {
-  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+MQTTEntity MQTTEntity::createSwitch(MQTTDevice mqttDevice, String name, String commandTopic, String objectId, String payloadOn, String payloadOff, String stateTopic, bool retain) {
+  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic, retain);
   mqttEntity.deviceType = Switch;
   mqttEntity.payloadOff = payloadOff;
   mqttEntity.payloadOn = payloadOn;
   return mqttEntity;
 }
 
-MQTTEntity MQTTEntity::createSelect(MQTTDevice mqttDevice, String name, String commandTopic, std::vector<String> options, String objectId, String stateTopic) {
-  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic);
+MQTTEntity MQTTEntity::createSelect(MQTTDevice mqttDevice, String name, String commandTopic, std::vector<String> options, String objectId, String stateTopic, bool retain) {
+  MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic, retain);
   mqttEntity.options = options;
   return mqttEntity;
 }
@@ -82,6 +83,7 @@ MQTTEntity MQTTEntity::createSelect(MQTTDevice mqttDevice, String name, String c
 String MQTTEntity::getJSON() {
   DynamicJsonDocument json(1024);
 
+  json["ret"] = retain;
   addParamIfNotEmpty(json, "avty_t", availabilityTopic);
   addParamIfNotEmpty(json, "pl_off", payloadOff);
   addParamIfNotEmpty(json, "pl_on", payloadOn);
