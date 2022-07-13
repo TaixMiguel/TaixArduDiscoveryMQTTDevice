@@ -76,7 +76,7 @@ MQTTEntity MQTTEntity::createSwitch(MQTTDevice mqttDevice, String name, String c
 
 MQTTEntity MQTTEntity::createSelect(MQTTDevice mqttDevice, String name, String commandTopic, std::vector<String> options, String objectId, String stateTopic, bool retain) {
   MQTTEntity mqttEntity = MQTTEntity::createGeneric(mqttDevice, name, objectId, stateTopic, commandTopic, retain);
-  mqttEntity.options = options;
+  mqttEntity.lOptions = options;
   return mqttEntity;
 }
 
@@ -103,7 +103,7 @@ String MQTTEntity::getJSON() {
     json["max"] = max;
     json["step"] = step;
   }
-  addArrayIfNotEmpty(json, "options", options);
+  addArrayIfNotEmpty(json, "options", lOptions);
   mqttDevice.addConfigDevice(json);
 
   // TODO: eliminar en futuras versiones

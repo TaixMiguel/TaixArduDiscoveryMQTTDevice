@@ -49,7 +49,7 @@ class MQTTEntity {
     DeviceType deviceType = Default;
     MQTTDevice mqttDevice;
     float step, min, max;
-    std::vector<String> options;
+    std::vector<String> lOptions;
     String payloadOn, payloadOff;
 
     static MQTTEntity createGeneric(MQTTDevice mqttDevice, String name, String objectId="", String stateTopic="", String commandTopic="", bool retain=false);
